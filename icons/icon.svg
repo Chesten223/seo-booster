@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a7f37"/>
+      <stop offset="100%" style="stop-color:#238636"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="24" fill="url(#bg)"/>
+  <!-- Magnifying glass -->
+  <circle cx="52" cy="52" r="26" fill="none" stroke="#fff" stroke-width="6"/>
+  <line x1="70" y1="70" x2="92" y2="92" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+  <!-- Chart bars inside glass -->
+  <rect x="36" y="56" width="8" height="14" rx="2" fill="#fff" opacity=".9"/>
+  <rect x="48" y="46" width="8" height="24" rx="2" fill="#fff" opacity=".9"/>
+  <rect x="60" y="50" width="8" height="20" rx="2" fill="#fff" opacity=".9"/>
+  <!-- SEO tag -->
+  <text x="30" y="110" font-family="Arial,sans-serif" font-size="20" font-weight="bold" fill="#fff" opacity=".85">SEO</text>
+</svg>

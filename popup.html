@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 420px;
+    min-height: 480px;
+    background: #0d1117;
+    color: #c9d1d9;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+  }
+
+  /* Header */
+  .header {
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .header-icon { width: 20px; height: 20px; }
+  .header h1 { font-size: 14px; font-weight: 600; color: #58a6ff; }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 8px 4px;
+    background: none;
+    border: none;
+    color: #8b949e;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  .tab-btn:hover { color: #c9d1d9; }
+  .tab-btn.active { color: #58a6ff; border-bottom-color: #58a6ff; }
+
+  /* Tab content */
+  .tab-content { display: none; padding: 12px 14px; max-height: 400px; overflow-y: auto; }
+  .tab-content.active { display: block; }
+  .tab-content::-webkit-scrollbar { width: 6px; }
+  .tab-content::-webkit-scrollbar-track { background: #0d1117; }
+  .tab-content::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
+
+  /* Status colors */
+  .status-good { color: #3fb950; }
+  .status-warn { color: #d29922; }
+  .status-bad { color: #f85149; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; flex-shrink: 0; }
+  .dot-good { background: #3fb950; }
+  .dot-warn { background: #d29922; }
+  .dot-bad { background: #f85149; }
+
+  /* Meta table */
+  .meta-table { width: 100%; border-collapse: collapse; }
+  .meta-table tr { border-bottom: 1px solid #21262d; }
+  .meta-table td { padding: 6px 4px; vertical-align: top; }
+  .meta-table .tag-name { color: #8b949e; width: 40%; word-break: break-all; font-family: 'SF Mono', Consolas, monospace; font-size: 11.5px; }
+  .meta-table .tag-value { color: #c9d1d9; word-break: break-word; font-size: 12px; }
+
+  /* OG Preview */
+  .og-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .og-card-header {
+    font-size: 10px;
+    color: #8b949e;
+    padding: 8px 12px 4px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .og-card-img {
+    width: 100%;
+    height: 160px;
+    background: #21262d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #484f58;
+    font-size: 12px;
+    overflow: hidden;
+  }
+  .og-card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .og-card-body { padding: 10px 12px; }
+  .og-card-url { font-size: 10px; color: #8b949e; margin-bottom: 4px; }
+  .og-card-title { font-size: 14px; font-weight: 600; color: #c9d1d9; margin-bottom: 4px; }
+  .og-card-desc { font-size: 12px; color: #8b949e; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  .og-section-title { font-size: 11px; color: #8b949e; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+
+  /* Headings */
+  .heading-tree { padding-left: 0; list-style: none; }
+  .heading-tree li { padding: 3px 0; display: flex; align-items: center; gap: 6px; }
+  .heading-tree .h-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #0d1117;
+    min-width: 22px;
+    text-align: center;
+  }
+  .h-badge-1 { background: #f85149; }
+  .h-badge-2 { background: #d29922; }
+  .h-badge-3 { background: #3fb950; }
+  .h-badge-4 { background: #58a6ff; }
+  .h-badge-5 { background: #bc8cff; }
+  .h-badge-6 { background: #8b949e; }
+  .heading-count { font-size: 11px; color: #8b949e; margin-bottom: 8px; }
+
+  /* Edit form */
+  .edit-group { margin-bottom: 10px; }
+  .edit-group label { display: block; font-size: 11px; color: #8b949e; margin-bottom: 3px; font-weight: 500; }
+  .edit-group input, .edit-group textarea {
+    width: 100%;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    color: #c9d1d9;
+    padding: 6px 8px;
+    font-size: 12px;
+    font-family: inherit;
+    outline: none;
+  }
+  .edit-group input:focus, .edit-group textarea:focus { border-color: #58a6ff; }
+  .edit-group textarea { resize: vertical; min-height: 48px; }
+  .edit-char-count { font-size: 10px; color: #484f58; text-align: right; margin-top: 2px; }
+  .edit-char-count.over { color: #f85149; }
+
+  .btn-save {
+    width: 100%;
+    padding: 8px;
+    background: #238636;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .btn-save:hover { background: #2ea043; }
+  .btn-save:disabled { background: #21262d; color: #484f58; cursor: default; }
+
+  .premium-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #d29922, #f0b030);
+    color: #0d1117;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* Empty state */
+  .empty-state { text-align: center; padding: 24px 0; color: #484f58; }
+  .empty-state svg { margin-bottom: 8px; }
+
+  /* Loading */
+  .loading { text-align: center; padding: 40px 0; color: #484f58; }
+  .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #30363d; border-top-color: #58a6ff; border-radius: 50%; animation: spin .6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6"/><path d="M8 11h6"/>
+  </svg>
+  <h1>SEO Booster</h1>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="meta">Meta Tags</button>
+  <button class="tab-btn" data-tab="preview">OG Preview</button>
+  <button class="tab-btn" data-tab="headings">Headings</button>
+  <button class="tab-btn" data-tab="edit">Edit<span class="premium-badge">PRO</span></button>
+</div>
+
+<!-- Meta Tags -->
+<div id="tab-meta" class="tab-content active">
+  <div class="loading"><div class="spinner"></div><br>Loading...</div>
+</div>
+
+<!-- OG Preview -->
+<div id="tab-preview" class="tab-content">
+  <div class="loading"><div class="spinner"></div><br>Loading...</div>
+</div>
+
+<!-- Headings -->
+<div id="tab-headings" class="tab-content">
+  <div class="loading"><div class="spinner"></div><br>Loading...</div>
+</div>
+
+<!-- Edit -->
+<div id="tab-edit" class="tab-content">
+  <div class="edit-group">
+    <label>Title <span class="edit-char-count" id="title-count">0 / 60</span></label>
+    <input type="text" id="edit-title" maxlength="200" placeholder="Page title">
+  </div>
+  <div class="edit-group">
+    <label>Description <span class="edit-char-count" id="desc-count">0 / 160</span></label>
+    <textarea id="edit-desc" maxlength="500" placeholder="Meta description"></textarea>
+  </div>
+  <div class="edit-group">
+    <label>og:title <span class="edit-char-count" id="og-title-count">0 / 90</span></label>
+    <input type="text" id="edit-og-title" maxlength="200" placeholder="OG title">
+  </div>
+  <div class="edit-group">
+    <label>og:description <span class="edit-char-count" id="og-desc-count">0 / 200</span></label>
+    <textarea id="edit-og-desc" maxlength="500" placeholder="OG description"></textarea>
+  </div>
+  <button class="btn-save" id="btn-save">Save to Page</button>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
